@@ -36,7 +36,6 @@ extension Npy {
             }
         }
         
-        
         data.append(header)
         data.append(self.elementsData)
         
@@ -90,4 +89,14 @@ func toData(elements: [UInt64], endian: Endian) -> Data {
     }
     let count = MemoryLayout<UInt64>.size * elements.count
     return Data(bytes: uints, count: count)
+}
+
+func toData(elements: [String]) -> Data {
+    let max = elements.map { $0.count }.max() ?? 0
+    var combinedData = Data()
+    for e in elements {
+        let data = (e.data(using: .utf8) ?? Data()) + Data(repeating: 0, count: max - e.count)
+        combinedData.append(data)
+    }
+    return combinedData
 }

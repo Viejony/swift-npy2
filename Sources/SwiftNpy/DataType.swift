@@ -15,10 +15,13 @@ public enum DataType: String {
     case float32 = "f4"
     case float64 = "f8"
     
+    case string = "S"
+    
     static var all: [DataType] {
         return [.bool,
                 .uint8, .uint16, .uint32, .uint64,
                 .int8, .int16, .int32, .int64,
-                .float32, .float64]
+                .float32, .float64, 
+                .string]
     }
 }

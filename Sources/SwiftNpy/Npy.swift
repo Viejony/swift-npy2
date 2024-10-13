@@ -3,7 +3,7 @@ import Foundation
 public struct Npy {
     
     let header: NpyHeader
-    let elementsData: Data
+    public let elementsData: Data
     
     public var shape: [Int] {
         return header.shape
@@ -120,6 +120,16 @@ extension Npy {
                                    endian: header.endian)
         self.init(header: header, elementsData: data)
     }
+
+    // New stuff
+    public init(shape: [Int], elements: [String]) {
+        precondition(shape.reduce(1, *) == elements.count)
+        let max = "\(elements.map { $0.count }.max() ?? 0)"
+        let descr = "'" + Endian.na.rawValue + DataType.string.rawValue + max + "'"
+        let header = NpyHeader(shape: shape, dataType: .string, endian: .na, isFortranOrder: false, descr: descr)
+        let data = toData(elements: elements)
+        self.init(header: header, elementsData: data)
+    }
 }
 
 extension Npy {
@@ -225,5 +235,12 @@ extension Npy {
         precondition(dataType == .float64)
         let uints: [UInt64] = loadUInts(data: elementsData, count: elementsCount, endian: endian)
         return uints.map { Double(bitPattern: $0) }
+    }
+
+    public func elements(_ type: String.Type = String.self) -> [String] {
+        precondition(dataType == .string)
+        let stringSize = Int(header.descr.dropFirst(3).dropLast(1)) ?? 0
+        let strings: [String] = loadStrings(data: elementsData, count: elementsCount, stringSize: stringSize)
+        return strings
     }
 }

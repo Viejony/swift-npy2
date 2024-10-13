@@ -1,4 +1,4 @@
-# SwiftNpy
+# SwiftNpy2
 Save/Load NumPy array files in Swift
 
 ```swift
@@ -32,6 +32,9 @@ They also can be read as `Int`
 ### Float, Double
 `Float`, `Double`
 
+### String
+`String`
+
 ## License
 
-[The MIT License](https://github.com/qoncept/swift-npy/blob/master/LICENSE)
+[The MIT License](https://github.com/Viejony/swift-npy2/blob/master/LICENSE)

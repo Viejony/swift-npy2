@@ -103,3 +103,34 @@ func loadUInt8s(data: Data, count: Int) -> [UInt8] {
     }
     return uints
 }
+
+func loadStrings(data: Data, count: Int, stringSize: Int) -> [String] {
+    precondition(data.count == count * stringSize)
+
+    var strings: [String] = []
+    var startIndex = 0
+    if data.count > 0 {
+        while startIndex < data.count {
+
+            // Determine the size of the slice
+            let endIndex = min(startIndex + stringSize, data.count)
+            var slice = data.subdata(in: startIndex..<endIndex)
+
+            // Find the first non-zero byte index and create a new Data instance starting from the first non-zero byte
+            if let lastNonZeroIndex = slice.lastIndex(where: { $0 != 0 }) {
+                let trimmedSlice = slice.subdata(in: 0..<lastNonZeroIndex + 1)
+                slice = trimmedSlice
+            }
+            
+            strings.append(String(data: slice, encoding: .utf8) ?? "")
+
+            // Increase index
+            startIndex += stringSize
+        }
+    } else {
+        for _ in 0..<count {
+            strings.append("")
+        }
+    }
+    return strings
+}

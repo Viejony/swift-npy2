@@ -57,7 +57,7 @@ func parseHeader(_ data: Data) throws -> NpyHeader {
             throw NpyLoaderError.ParseFailed(message: "Header does not contain the key 'descr'")
         }
         descr = separate[descrIndex + 1]
-        
+
         guard let e = Endian.all.filter({ descr.contains($0.rawValue) }).first else {
             throw NpyLoaderError.ParseFailed(message: "Unknown endian")
         }

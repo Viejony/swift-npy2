@@ -136,6 +136,19 @@ class NpySaverTests: XCTestCase {
         let e: [Double] = npy2.elements()
         XCTAssertEqual(e, elements)
     }
+
+    func testFormatString() {
+        let elements: [String] = ["a", "bb", "ccc", "dddd", "eeeee", "ffffff"]
+        let shape = [3, 2] + [Int](repeating: 1, count: 65535)
+        let npy = Npy(shape: shape, elements: elements)
+        let data = npy.format()
+        let npy2: Npy = try! Npy(data: data)
+        
+        XCTAssertEqual(npy.shape, npy2.shape)
+        
+        let e: [String] = npy2.elements()
+        XCTAssertEqual(e, elements)
+    }
     
     static var allTests = [
         ("testFormatB1", testFormatB1),
@@ -147,5 +160,6 @@ class NpySaverTests: XCTestCase {
         ("testFormatI2", testFormatI2),
         ("testFormatI4", testFormatI4),
         ("testFormatI8", testFormatI8),
+        ("testFormatString", testFormatString),
     ]
 }
